@@ -6,6 +6,15 @@ switch
 error handling
 */
 
+int factorial(int a) {
+    if (a<0) {throw a;}
+    int f=1;
+    for (int b=a;b>0;b--) {
+        f *= b;
+    }
+    return f;
+}
+
 int permORcomb(int a, int b, char mode) {
     int ans = factorial(a)/factorial(a-b);
     switch (mode) {
