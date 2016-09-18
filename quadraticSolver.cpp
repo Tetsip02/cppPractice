@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cmath> //sqrt()
+#include <vector>
 
 std::vector<double> qrsolver(double a, double b, double c)
 {
@@ -9,8 +10,6 @@ std::vector<double> qrsolver(double a, double b, double c)
     if (discriminant < 0) {throw 1;}
     roots[0] = (-b + std::sqrt(discriminant))/2*a;
     roots[1] = (-b - std::sqrt(discriminant))/2*a;
-    //roots[0] = x1;
-    //roots[1] = x2;
     return roots;
 }
 
