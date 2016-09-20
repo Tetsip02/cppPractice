@@ -2,12 +2,14 @@
 #include <assert.h>
 
 int daysInMonth[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+int daysInMonthLeapYear[12] = {31,29,31,30,31,30,31,31,30,31,30,31};
 
 class Date {
 private:
   int day, month, year;
 public:
   Date();
+  bool isLeapYear();
   Date(int, int, int);
   void next();
   int get_day() {return day;}
@@ -16,7 +18,6 @@ public:
   void set_day(int);
   void set_month(int);
   void set_year(int);
-  bool isLeapYear();
 };
 
 Date::Date() {
@@ -28,17 +29,18 @@ Date::Date(int d, int m, int y) {
   day = d;
   month = m;
   year = y;
-  if (month != 2 && !isLeapYear()) {
+  if (isLeapYear()) {
+    assert (d <= daysInMonthLeapYear[month-1]);
+  }
+  else {
     assert (d <= daysInMonth[month-1]);
   }
-  else {
-    assert (d <= 29);
-  }
+  assert (m <= 12);
 }
 void Date::next() {
-  if (month == 2 && isLeapYear() && day < 29) {++day;}
+  if (day == 28 && month == 2 && isLeapYear()) {++day;}
   else {
-    if (day == daysInMonth[month-1]) {
+    if (day == daysInMonth[month-1] || day == daysInMonthLeapYear[month-1]) {
       day = 1;
       if (month == 12) {
         month = 1;
@@ -54,11 +56,13 @@ void Date::next() {
   }
 }
 void Date::set_day(int d) {
-  if (month == 2 && isLeapYear()) {
-    assert (d <= 29);
+  if (isLeapYear()) {
+    assert (d <= daysInMonthLeapYear[month-1]);
   }
-  assert (d <= daysInMonth[month-1]);
-  day = d;
+  else {
+    assert (d <= daysInMonth[month-1]);
+    day = d;
+  }
 }
 void Date::set_month(int m) {
   assert (m <= 12);
@@ -78,10 +82,10 @@ bool Date::isLeapYear() {
   return false;
 }
 
-int main() {
-  Date myBirthday(29,2,1601);
-  myBirthday.next();
-  //myBirthday.set_month(10);
-  std::cout << myBirthday.get_day() << '\t' << myBirthday.get_month() << '\t' << myBirthday.get_year() << std::endl;
-  return 0;
-}
+// int main() {
+//   Date myBirthday(31,12,2005);
+//   myBirthday.next();
+//   //myBirthday.set_month(10);
+//   std::cout << myBirthday.get_day() << '\t' << myBirthday.get_month() << '\t' << myBirthday.get_year() << std::endl;
+//   return 0;
+// }
