@@ -16,8 +16,9 @@ public:
   Rational& operator+=(const Rational& RHS);
   Rational& operator*=(const Rational& RHS);
 
-  std::ostream& operator<<(std::ostream& os, const Rational& r);
-  std::istream& operator>>(std::ostream& is, const Rational& r);
+  //input/output operators are not member functions. By declaring them inside the class with friend, the function will have access to all members even though it's defined outside the class.
+  friend std::ostream& operator<<(std::ostream& os, const Rational& r);
+  friend std::istream& operator>>(std::istream& is, Rational& r);
 
 private:
   int numerator;
@@ -87,6 +88,21 @@ Rational& Rational::operator*=(const Rational& RHS) {
   return *this;
 }
 
+std::ostream& operator<<(std::ostream& os, const Rational& r) {
+  os << r.numerator << "/" << r.denominator;
+  return os;
+}
+
+std::istream& operator>>(std::istream& is, Rational& r) {
+  is >> r.numerator;
+  char c;
+  is >> c;
+  assert (c == '/');
+  is >> r.denominator;
+  r.reduce();
+  return is;
+}
+
 int main() {
   Rational exp(8,6);
   int a = exp.num();
@@ -100,5 +116,11 @@ int main() {
   exp.print();
   exp *= t;
   exp.print();
+  std::cout << "next" << std::endl;
+  std::cout << "using << operator" << '\t' << exp << std::endl;
+  Rational inp;
+  std::cout << "enter a rational in the format a/b: ";
+  std::cin >> inp;
+  std::cout << "input = " << inp << std::endl;
   return 0;
 }
